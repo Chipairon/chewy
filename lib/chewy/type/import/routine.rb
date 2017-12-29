@@ -65,6 +65,10 @@ module Chewy
         # @return [Object] whatever
         def create_indexes!
           Chewy::Stash.create if @options[:journal]
+
+          # Until Journal type mappings are adapted to ES 6.x, don't use it:
+          return if @type == Chewy::Stash::Specification
+
           return if Chewy.configuration[:skip_index_creation_on_import]
           @type.index.create!(@bulk_options.slice(:suffix)) unless @type.index.exists?
         end
